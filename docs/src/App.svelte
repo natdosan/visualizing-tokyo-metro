@@ -55,36 +55,17 @@
         popup.remove();
       });
 
-      // Calculate opacity based on ridership to population ratio
-      function calculateOpacity(ridership, population) {
-        const ratio = ridership / population;
-        const minOpacity = 0.4; // Ensure markers are always somewhat visible
-        const maxOpacity = 1.0;
-        let opacity = ratio * (maxOpacity - minOpacity) + minOpacity;
-        opacity = Math.min(Math.max(opacity, minOpacity), maxOpacity); // Clamp between min and max
-        console.log(`Ridership: ${ridership}, Population: ${population}, Opacity: ${opacity}`);
-        return opacity;
-      }
-
       const response = await fetch('/stations.json'); 
       const stationsData = await response.json(); 
-      console.log(stationsData[0]); // Log the first station object to verify structure
-
 
       Object.values(stationsData).flat().forEach(station => {
-        const opacity = calculateOpacity(Number(station.ridership), Number(station.population));
-        console.log(opacity); // Add this inside the forEach loop after calculating opacity
-        const el = document.createElement('div');
-        el.className = 'station-marker'; // Add CSS for this class as needed
-        el.style.opacity = .5;
-        el.style.backgroundColor = `rgba(255, 0, 0, ${opacity})`; // Dynamic red color based on opacity
-        el.style.opacity = opacity.toString(); // Explicitly converting to string
-
-        const marker = new mapboxgl.Marker(el)
+        const marker = new mapboxgl.Marker()
           .setLngLat(station.coordinates)
-          .setPopup(new mapboxgl.Popup().setText(`${station.name}: Daily Ridership - ${station.ridership} \n ${station.name}: Ward Population - ${station.population}`))
+          .setPopup(new mapboxgl.Popup().setText(`${station.name}: Daily Ridership - ${station.ridership}`))
           .addTo(mapTokyo);
-        });
+
+        stationMarkers.push(marker); // Store the marker reference
+      });
     });
   });
 
@@ -128,23 +109,10 @@
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
   }
-
-  h1 {
-    text-align: center;
-    position: absolute;
-    top: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index:2; /* Ensure titile is above map and buttion */
-    padding: 8px 16px;
-    border-radius: 4px;
-  }
 </style>
 
-<h1 class='h1'> Live Traffic Congestion and the 10 Most Active Metro Lines in Tokyo </h1>
-
 <div id="map-tokyo">
-  <div class="h1">Tokyo Live Roads with Metro Lines</div>
+  <div class="map-title">Tokyo Live Roads with Metro Lines</div>
   <button class="toggle-button" on:click={toggleRailwayVisibility}>
     {isRailwayVisible ? 'Hide Railway Lines' : 'Show Railway Lines'}
   </button>
