@@ -1,0 +1,13 @@
+City,Local Name,Country,Continent,System Name,Start Date,System Length (km),Stations,Lines,Avg Station Distance (m),Density (stations/km),Daily Ridership (millions),Annual Ridership (millions),City Population (millions),Metro Ridership Share (%),Gauge (mm),Ticket Price (EUR),Drive Side,Voltage,Notable Extensions,PSDs
+Shanghai,Jiangsu,China,Asia,Metro,10 Apr 1995,632.1,394,15,1668,42.1,6.24,2276,15.0,20.8,42.2,0.34,right,1500,newer line 4 stations and refitted line 1 stations,yes
+Beijing,Peking,China,Asia,Subway,1 Oct 1969,572.0,344,20,1765,28.6,6.74,2460,11.1,30.3,51.5,0.15,right,825,Yanfang line,yes
+London,London,United Kingdom,Europe,Underground,10 Jan 1863,402.0,270,11,1552,36.5,3.21,1171,8.57,18.7,46.9,2.75,left,"600, 750 (DLR)",Docklands Light Rail,
+Guangzhou,Canton,China,Asia,Metro,28 Jun 1999,386.0,229,13,1787,29.7,5.0,1825,8.83,28.3,43.7,right,825,Zhujiang people mover,yes
+New York,New York,USA,America,Subway,27 Oct 1904,380.2,473,27,852,14.1,4.53,1655,19.0,11.9,20.0,1.53,right,"625, 650 (PATH)",
+Moscow, ,Russia,Europe,Metro,15 May 1935,346.2,206,12,1785,28.9,6.55,2389,10.5,31.3,33.1,0.5,right,825,
+Seoul,Incheon,South Korea,Asia,Subway,15 Aug 1974,326.5,302,9,1114,36.3,6.9,2518,9.8,35.2,33.3,0.54,right,1500,yes
+Tokyo,Greater Tokyo Region,Japan,Asia,Metro,30 Dec 1927,304.5,290,13,1099,23.4,8.5,3102,35.7,11.9,8.5,1.57,left,"1500, 600 (Ginza, Marunouchi lines)",Yurikamome line,yes
+Madrid, ,Spain,Europe,Metro,17 Oct 1919,293.0,289,13,1062,22.5,1.74,635,5.57,15.6,52.6,1.0,left,600,yes
+Paris,Ile de France,France,Europe,Métro,19 Jul 1900,219.9,383,16,599,13.7,4.18,1524,9.9,21.1,22.2,1.57,"right (metro), left (RER)",750,"lines 1, 4, 6, 11, 14",yes
+Singapore, ,Singapore,Asia,MRT,7 Nov 1987,199.2,141,5,1465,39.8,2.18,794,4.44,24.5,44.9,0.97,left,750,LRT lines,yes
+Hong Kong,Hong Kong S.A.R.,Hong Kong,Asia,MTR,1 Oct 1979,197.4,113,11,1935,17.9,3.96,1444,7.21,27.4,27.4,0.91,left,"1500 (MTR), 25000 (KCR)","SI, WI lines, planned",yes
