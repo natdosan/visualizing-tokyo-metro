@@ -27,7 +27,7 @@
     mapTokyo.on('load', async() => {
       mapTokyo.addSource('tokyo-railways', {
         type: 'geojson',
-        data: '/visualizing-tokyo-metro/N02-19_RailroadSection.geojson'
+        data: '/N02-19_RailroadSection.geojson'
       });
 
       mapTokyo.addLayer({
@@ -55,7 +55,7 @@
         popup.remove();
       });
 
-      const response = await fetch('/visualizing-tokyo-metro/stations.json'); 
+      const response = await fetch('/stations.json'); 
       const stationsData = await response.json(); 
 
       Object.values(stationsData).flat().forEach(station => {
