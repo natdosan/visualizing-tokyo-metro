@@ -7,10 +7,12 @@
   let mapTokyo;
   let isRailwayVisible = false;
   let areStationsVisible = false; // Initial state
+  let isChoroplethVisible = false; 
   let stationMarkers = [];
+  let geojson;
 
   onMount(() => {
-    // Tokyo map
+    // define Tokyo map
     mapTokyo = new mapboxgl.Map({
       container: 'map-tokyo',
       style: 'mapbox://styles/mapbox/navigation-night-v1',
@@ -18,18 +20,19 @@
       zoom: 12
     });
 
+    // define Pop up objects
     const popup = new mapboxgl.Popup({
       closeButton: false,
       closeOnClick: false
     });
 
-    // Add railways
+    // Load railways
     mapTokyo.on('load', async() => {
       mapTokyo.addSource('tokyo-railways', {
         type: 'geojson',
         data: '/N02-19_RailroadSection.geojson'
       });
-
+      // add the actual layer
       mapTokyo.addLayer({
         id: 'tokyo-railways-layer',
         type: 'line',
@@ -41,7 +44,7 @@
           'line-opacity': isRailwayVisible ? 1 : 0
         }
       });
-
+      // Hover metric: Line name
       mapTokyo.on('mousemove', 'tokyo-railways-layer', (e) => {
         if (e.features.length > 0) {
           const feature = e.features[0];
@@ -50,10 +53,75 @@
                .addTo(mapTokyo);
         }
       });
-
+      // Remove line name when hover off
       mapTokyo.on('mouseleave', 'tokyo-railways-layer', () => {
         popup.remove();
       });
+
+    // Load administrative boundaries
+    mapTokyo.addSource('tokyo-boundaries', {
+      type: 'geojson',
+      data: '/tokyo23_population.geojson'
+    });
+
+    // add administrative boundary layer
+    mapTokyo.addLayer({
+      id: 'tokyo-administrative-boundaries',
+      type: 'line',
+      source: 'tokyo-boundaries',
+      layout: {},
+      paint: {
+        'line-color': '#FFFFFF',
+        'line-width': 2,
+      }
+    });
+
+    // Load Population Density Choropleth source
+    mapTokyo.addSource('tokyo-population-density', {
+        type: 'geojson',
+        data: '/tokyo23_population.geojson'
+    });
+      
+    // add the population density layer
+    mapTokyo.addLayer({
+      id: 'tokyo-population-density',
+      type: 'fill',
+      source: 'tokyo-population-density',
+      paint: {
+        'fill-color': [
+          'interpolate',
+          ['linear'],
+          ['get', 'population'],
+          0, '#ffffff',
+          100000, '#614144',
+          300000, '#802A37',
+          500000, '#A51C2A',
+          700000, '#DE0D0D',
+          1000000, '#FF9641'
+        ],
+        'fill-opacity': 0.5
+      }
+    });
+
+    // Show/hide population numbers on hover
+    mapTokyo.on('mousemove', 'tokyo-population-density', (e) => {
+      // console.log(e.features[0].properties) they are populated 
+      if (e.features.length > 0) {
+        const feature = e.features[0];
+        const population = feature.properties['population'];
+        // console.log(population) the population numbers are showing in real time
+        mapTokyo.getCanvas().style.cursor = 'pointer';
+        popup.setLngLat(e.lngLat)
+            .setHTML(`<h3>Population: ${population}</h3>`)
+            .addTo(mapTokyo);
+      }
+    });
+
+    // Remove popup on mouseleave
+    mapTokyo.on('mouseleave', 'tokyo-population-density', () => {
+      mapTokyo.getCanvas().style.cursor = '';
+      popup.remove();
+    });
 
       // Calculate opacity based on ridership to population ratio
       function calculateOpacity(ridership, population) {
@@ -94,6 +162,11 @@
     stationMarkers.forEach(marker => {
       areStationsVisible ? marker.addTo(mapTokyo) : marker.remove();
   });
+  }
+  // Toggle choropleth visibility
+  function toggleChoroplethVisibility() {
+    isChoroplethVisible = !isChoroplethVisible;
+    mapTokyo.setLayoutProperty('tokyo-population-density', 'visibility', isChoroplethVisible ? 'visible' : 'none');
   }
 </script>
 
@@ -146,5 +219,8 @@
   </button>
   <button class="toggle-button" on:click={toggleStationVisibility} style="top: 80px;">
     {areStationsVisible ? 'Hide Stations' : 'Show Stations'}
+  </button>
+  <button class="toggle-button" on:click={toggleChoroplethVisibility} style="top: 140px;">
+    {isChoroplethVisible ? 'Hide Choropleth' : 'Show Choropleth'}
   </button>
 </div>
